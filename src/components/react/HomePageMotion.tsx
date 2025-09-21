@@ -70,10 +70,10 @@ function Section({ id }: { id: number }) {
             <h2 className="section-title">{section.title}</h2>
           )}
           {section.content?.map((content, index) => (
-            <>
+            <div key={index}>
               <p className="section-content">{content}</p>
-              {index !== section.content?.length - 1 && <br />}
-            </>
+              {index !== section.content.length - 1 && <br />}
+            </div>
           ))}
         </div>
       </div>
