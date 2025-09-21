@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SidebarLayout } from "@/components/react/SidebarLayout";
+import ThemeHeadScript from "@/components/ThemeHeadScript.astro";
 ---
 
 <!doctype html>
@@ -11,6 +12,7 @@ import { SidebarLayout } from "@/components/react/SidebarLayout";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>東海駭客社</title>
+    <ThemeHeadScript />
   </head>
   <body class="m-0 w-full h-full">
     <SidebarLayout client:load>

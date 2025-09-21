@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.3.1",
+    "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
@@ -20,7 +21,9 @@
     "astro": "^5.13.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "foxact": "^0.2.49",
     "lucide-react": "^0.544.0",
+    "motion": "^12.23.16",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-simple-typewriter": "^5.0.1",
