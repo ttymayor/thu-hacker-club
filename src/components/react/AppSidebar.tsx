@@ -1,4 +1,4 @@
-import { Calendar, Folder, Home, Star, Inbox } from "lucide-react";
+import { Calendar, Folder, Home, File, Inbox } from "lucide-react";
 
 import {
   Sidebar,
@@ -19,6 +19,18 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+interface Post {
+  filename: string;
+  title: string;
+  author: string;
+  url: string;
+  path: string;
+}
+
+interface AppSidebarProps {
+  posts?: Post[];
+}
+
 // Menu items.
 const items = [
   {
@@ -33,7 +45,7 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ posts = [] }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarContent>
@@ -61,14 +73,16 @@ export function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="/2025/9/18">
-                            <Folder />
-                            <span>2025/9/18</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
+                      {posts.map((post) => (
+                        <SidebarMenuSubItem key={post.filename}>
+                          <SidebarMenuSubButton asChild>
+                            <a href={post.url}>
+                              <File />
+                              <span>{post.title}</span>
+                            </a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </SidebarMenuItem>
