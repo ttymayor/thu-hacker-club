@@ -68,14 +68,14 @@ export function AppSidebar({ posts = [] }: AppSidebarProps) {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer">
                       <Inbox />
-                      <span>114 東海駭客社 - 歸檔</span>
+                      <span>114 東海駭客社 - 上課內容</span>
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {posts.map((post) => (
                         <SidebarMenuSubItem key={post.filename}>
-                          <SidebarMenuSubButton asChild>
+                          <SidebarMenuSubButton asChild size="sm">
                             <a href={post.url}>
                               <File />
                               <span>{post.title}</span>
