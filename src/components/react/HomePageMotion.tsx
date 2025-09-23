@@ -56,29 +56,35 @@ function Section({ id }: { id: number }) {
   const section = getSectionContent(id);
 
   return (
-    <section className="section-container select-none">
-      <div ref={ref} className="content-wrapper">
-        <div className="prose-container">
+    <section className="min-h-screen flex justify-center items-center relative p-8 md:p-4 select-none snap-start">
+      <div ref={ref} className="max-w-4xl w-full mx-auto">
+        <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-12 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/10">
           {id === 1 ? (
             <>
-              <h2 className="section-title text-center">114 東海駭客社</h2>
-              <div className="typing-container">
+              <h2 className="text-4xl md:text-3xl font-bold mb-6 text-center bg-green-600 dark:bg-green-400 bg-clip-text text-transparent">
+                114 東海駭客社
+              </h2>
+              <div className="flex justify-center">
                 <Typing />
               </div>
             </>
           ) : (
-            <h2 className="section-title">{section.title}</h2>
+            <h2 className="text-4xl md:text-3xl font-bold mb-6 bg-green-600 dark:bg-green-400 bg-clip-text text-transparent">
+              {section.title}
+            </h2>
           )}
           {section.content?.map((content, index) => (
             <div key={index}>
-              <p className="section-content">{content}</p>
+              <p className="text-lg leading-relaxed text-foreground m-0 md:text-base">
+                {content}
+              </p>
               {index !== section.content.length - 1 && <br />}
             </div>
           ))}
         </div>
       </div>
       <motion.div
-        className="section-number"
+        className="text-green-600 dark:text-green-200 m-0 font-mono text-6xl md:text-5xl font-bold tracking-tighter leading-tight absolute inline-block top-16 right-16 md:right-4 opacity-30"
         initial={{ visibility: "hidden" }}
         animate={{ visibility: "visible" }}
         style={{ y }}
@@ -91,116 +97,11 @@ function Section({ id }: { id: number }) {
 
 export default function Parallax() {
   return (
-    <div id="example">
+    <div id="example" className="relative snap-y snap-mandatory">
       {[1, 2, 3, 4, 5].map((sectionId) => (
         <Section key={sectionId} id={sectionId} />
       ))}
-      <StyleSheet />
     </div>
-  );
-}
-
-/**
- * ==============   Styles   ================
- */
-
-function StyleSheet() {
-  return (
-    <style>{`
-        html {
-            scroll-snap-type: y mandatory;
-        }
-
-        #example {
-            position: relative;
-        }
-
-        .section-container {
-            min-height: 100vh;
-            scroll-snap-align: start;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 2rem;
-        }
-
-        .content-wrapper {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .prose-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #8df0cc, #4ade80);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .section-content {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: var(--foreground);
-            margin: 0;
-        }
-
-        .typing-container {
-            display: flex;
-            justify-content: center;
-        }
-
-        .section-number {
-            color: #8df0cc;
-            margin: 0;
-            font-family: "Azeret Mono", monospace;
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: -3px;
-            line-height: 1.2;
-            position: absolute;
-            display: inline-block;
-            top: 4rem;
-            right: 4rem;
-            opacity: 0.3;
-        }
-
-        @media (max-width: 768px) {
-            .section-container {
-                padding: 1rem;
-            }
-
-            .prose-container {
-                padding: 2rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .section-content {
-                font-size: 1rem;
-            }
-
-            .section-number {
-                font-size: 3rem;
-                top: 1rem;
-                right: 1rem;
-            }
-        }
-    `}</style>
   );
 }
 
