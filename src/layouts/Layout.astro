@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { SidebarLayout } from "@/components/react/SidebarLayout";
 import ThemeHeadScript from "@/components/ThemeHeadScript.astro";
 import { getPosts } from "@/utils/getPosts";
+import { ClientRouter } from "astro:transitions";
 
 const posts = await getPosts();
 ---
@@ -16,10 +17,13 @@ const posts = await getPosts();
     <meta name="generator" content={Astro.generator} />
     <title>東海駭客社</title>
     <ThemeHeadScript />
+    <ClientRouter />
   </head>
   <body class="m-0 w-full h-full">
     <SidebarLayout client:load posts={posts}>
-      <slot />
+      <div transition:animate="slide">
+        <slot />
+      </div>
     </SidebarLayout>
   </body>
 </html>
