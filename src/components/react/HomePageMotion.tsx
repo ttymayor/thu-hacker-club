@@ -33,7 +33,7 @@ function Section({ id }: { id: number }) {
         ],
       },
       {
-        title: "我們的使命",
+        title: "目標",
         content: [
           "提供學習環境，讓大家一起學習資安和開發，一起成長。並專注於：資訊安全、程式開發、解題技巧。",
         ],
@@ -63,7 +63,7 @@ function Section({ id }: { id: number }) {
       whileInView={{ filter: "none" }}
       className="min-h-screen flex justify-center items-center relative p-8 md:p-4 select-none snap-start"
     >
-      <div ref={ref} className="max-w-xl w-full mx-auto">
+      <div ref={ref} className="max-w-2xl w-full mx-auto">
         <motion.div
           initial={{ y: 200 }}
           whileInView={{ y: 0 }}
@@ -97,12 +97,10 @@ function Section({ id }: { id: number }) {
                 {typedIndex.includes(index) && (
                   <Typewriter
                     words={[content]}
-                    loop={0}
+                    loop={1}
                     cursor
                     cursorStyle="▌"
                     typeSpeed={30}
-                    delaySpeed={10000}
-                    deleteSpeed={10}
                   />
                 )}
               </motion.p>
