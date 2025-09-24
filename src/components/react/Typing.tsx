@@ -10,6 +10,7 @@ export const Typing = () => {
       ]}
       loop={0}
       cursor
+      cursorStyle="▌"
       typeSpeed={70}
       delaySpeed={1000}
     />

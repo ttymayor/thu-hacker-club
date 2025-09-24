@@ -4,11 +4,11 @@ const posts = Object.values(
 );
 ---
 
-<p class="text-2xl font-bold">Post Archive:</p>
+<p class="text-2xl font-bold mb-2">上課內容列表</p>
 <ul>
   {
     posts.map((post: any) => (
-      <li class="text-lg">
+      <li class="text-lg mb-1 text-green-500 hover:text-green-600 transition-colors ">
         <a href={post.url}>{post.frontmatter.title}</a>
       </li>
     ))

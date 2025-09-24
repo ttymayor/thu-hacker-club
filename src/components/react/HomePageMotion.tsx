@@ -5,8 +5,9 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Typing } from "@/components/react/Typing";
+import { Typewriter } from "react-simple-typewriter";
 
 function useParallax(value: MotionValue<number>, distance: number) {
   return useTransform(value, [0, 1], [-distance, distance]);
@@ -17,12 +18,13 @@ function Section({ id }: { id: number }) {
   const { scrollYProgress } = useScroll({ target: ref });
   const y = useParallax(scrollYProgress, 200);
 
+  // 控制每段文字是否要開始打字
+  const [typedIndex, setTypedIndex] = useState<number[]>([]);
+
   // 段落內容
   const getSectionContent = (id: number) => {
     const sections = [
-      {
-        title: "114 東海駭客社",
-      },
+      { title: "114 東海駭客社" },
       {
         title: "關於我們",
         content: [
@@ -56,33 +58,60 @@ function Section({ id }: { id: number }) {
   const section = getSectionContent(id);
 
   return (
-    <section className="min-h-screen flex justify-center items-center relative p-8 md:p-4 select-none snap-start">
-      <div ref={ref} className="max-w-4xl w-full mx-auto">
-        <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-12 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/10">
+    <motion.section
+      initial={{ filter: "blur(10px)" }}
+      whileInView={{ filter: "none" }}
+      className="min-h-screen flex justify-center items-center relative p-8 md:p-4 select-none snap-start"
+    >
+      <div ref={ref} className="max-w-xl w-full mx-auto">
+        <motion.div
+          initial={{ y: 200 }}
+          whileInView={{ y: 0 }}
+          className="bg-white/5 backdrop-blur-lg rounded-2xl p-12 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/10"
+        >
           {id === 1 ? (
             <>
-              <h2 className="text-4xl md:text-3xl font-bold mb-6 text-center bg-green-600 dark:bg-green-400 bg-clip-text text-transparent">
-                114 東海駭客社
+              <h2 className="text-4xl md:text-3xl font-bold mb-6 bg-green-600 dark:bg-green-400 bg-clip-text text-transparent">
+                &gt; 東海駭客社
               </h2>
-              <div className="flex justify-center">
-                <Typing />
-              </div>
+              <Typing />
             </>
           ) : (
             <h2 className="text-4xl md:text-3xl font-bold mb-6 bg-green-600 dark:bg-green-400 bg-clip-text text-transparent">
-              {section.title}
+              &gt; {section.title}
             </h2>
           )}
+
           {section.content?.map((content, index) => (
             <div key={index}>
-              <p className="text-lg leading-relaxed text-foreground m-0 md:text-base">
-                {content}
-              </p>
+              <motion.p
+                viewport={{ once: true }}
+                onViewportEnter={() => {
+                  setTypedIndex((prev) =>
+                    prev.includes(index) ? prev : [...prev, index]
+                  );
+                }}
+                className="text-lg leading-relaxed text-foreground m-0 md:text-base"
+              >
+                {"> "}
+                {typedIndex.includes(index) && (
+                  <Typewriter
+                    words={[content]}
+                    loop={0}
+                    cursor
+                    cursorStyle="▌"
+                    typeSpeed={30}
+                    delaySpeed={10000}
+                    deleteSpeed={10}
+                  />
+                )}
+              </motion.p>
               {index !== section.content.length - 1 && <br />}
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
+
       <motion.div
         className="text-green-600 dark:text-green-200 m-0 font-mono text-6xl md:text-5xl font-bold tracking-tighter leading-tight absolute inline-block top-16 right-16 md:right-4 opacity-30"
         initial={{ visibility: "hidden" }}
@@ -91,7 +120,7 @@ function Section({ id }: { id: number }) {
       >
         {`0${id}`}
       </motion.div>
-    </section>
+    </motion.section>
   );
 }
 
