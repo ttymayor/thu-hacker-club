@@ -17,6 +17,7 @@ export async function getPosts() {
         filename,
         title: frontmatter.title || filename,
         author: frontmatter.author || "Unknown",
+        date: frontmatter.date || "",
         url: `/posts/${filename}`,
         path
       };

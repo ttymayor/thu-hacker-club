@@ -11,41 +11,31 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarMenuSubItem
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
+  CollapsibleTrigger
 } from "@/components/ui/collapsible";
-
-interface Post {
-  filename: string;
-  title: string;
-  author: string;
-  url: string;
-  path: string;
-}
-
-interface AppSidebarProps {
-  posts?: Post[];
-}
+import { getPosts } from "@/utils/getPosts";
 
 // Menu items.
 const items = [
   {
     title: "首頁",
     url: "/",
-    icon: Home,
+    icon: Home
   },
   {
     title: "行事曆",
     url: "/calendar",
-    icon: Calendar,
-  },
+    icon: Calendar
+  }
 ];
 
-export function AppSidebar({ posts = [] }: AppSidebarProps) {
+export async function AppSidebar() {
+  const posts = await getPosts();
   return (
     <Sidebar>
       <SidebarContent>
