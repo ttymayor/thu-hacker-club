@@ -1,4 +1,5 @@
 import { Calendar, Home, File, Inbox } from "lucide-react";
+import { useState, useEffect } from "react";
 
 import {
   Sidebar,
@@ -11,12 +12,12 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
+  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
 interface Post {
@@ -37,16 +38,50 @@ const items = [
   {
     title: "首頁",
     url: "/",
-    icon: Home
+    icon: Home,
   },
   {
     title: "行事曆",
     url: "/calendar",
-    icon: Calendar
-  }
+    icon: Calendar,
+  },
 ];
 
 export function AppSidebar({ posts = [], path }: AppSidebarProps) {
+  const [currentPath, setCurrentPath] = useState<string>("");
+  const [isClient, setIsClient] = useState(false);
+
+  // 確保只在客戶端執行
+  useEffect(() => {
+    setIsClient(true);
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
+
+  // 監聽路由變化（如果使用 Astro transitions）
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    // 監聽 popstate 事件（瀏覽器前進/後退）
+    window.addEventListener("popstate", handleLocationChange);
+
+    // 監聽 Astro 的路由變化事件
+    document.addEventListener("astro:page-load", handleLocationChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleLocationChange);
+      document.removeEventListener("astro:page-load", handleLocationChange);
+    };
+  }, [isClient]);
+
+  // 使用客戶端路徑，如果不可用則回退到服務器端路徑
+  const activePath = isClient ? currentPath : path || "";
+
   return (
     <Sidebar variant="floating">
       <SidebarContent>
@@ -56,7 +91,7 @@ export function AppSidebar({ posts = [], path }: AppSidebarProps) {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={path === item.url}>
+                  <SidebarMenuButton asChild isActive={activePath === item.url}>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -69,7 +104,7 @@ export function AppSidebar({ posts = [], path }: AppSidebarProps) {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton
                       className="cursor-pointer"
-                      isActive={path?.startsWith("/posts")}
+                      isActive={activePath?.startsWith("/posts")}
                     >
                       <Inbox />
                       <span>114 東海駭客社 - 上課內容</span>
@@ -82,7 +117,7 @@ export function AppSidebar({ posts = [], path }: AppSidebarProps) {
                           <SidebarMenuSubButton
                             asChild
                             size="sm"
-                            isActive={path === post.url}
+                            isActive={activePath === post.url}
                           >
                             <a href={post.url}>
                               <File />
