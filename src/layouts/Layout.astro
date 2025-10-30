@@ -22,7 +22,7 @@ const isHomePage = Astro.url.pathname === "/";
   </head>
   <body class="m-0 w-full h-full">
     <SidebarLayout
-      client:load
+      client:only="react"
       posts={posts}
       showAnchors={isHomePage}
       path={Astro.url.pathname}

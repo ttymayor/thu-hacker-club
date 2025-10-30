@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 
@@ -18,32 +18,55 @@ const navbarAnchors: NavbarAnchor[] = [
 export function NavbarAnchors() {
   const [activeSection, setActiveSection] = useState<string>("intro");
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // 確保只在客戶端執行
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = navbarAnchors.map(({ anchor }) => anchor);
+    if (!isClient) return;
 
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // 如果 section 在視窗中央附近，就設為 active
-          if (
-            rect.top <= window.innerHeight / 2 &&
-            rect.bottom >= window.innerHeight / 2
-          ) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
+    // 使用 Intersection Observer 替代 scroll 事件
+    const observerOptions = {
+      root: null,
+      rootMargin: "-50% 0px -50% 0px", // 只有當元素在視窗中央時才觸發
+      threshold: 0,
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // 初始化時執行一次
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    observerRef.current = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+
+    // 等待 DOM 完全載入後再開始觀察
+    const timer = setTimeout(() => {
+      const sections = navbarAnchors.map(({ anchor }) => anchor);
+      sections.forEach((sectionId) => {
+        const element = document.getElementById(sectionId);
+        if (element && observerRef.current) {
+          observerRef.current.observe(element);
+        }
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [isClient]);
 
   const scrollToSection = (anchor: string) => {
     const element = document.getElementById(anchor);
