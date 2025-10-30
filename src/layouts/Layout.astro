@@ -6,6 +6,7 @@ import { getPosts } from "@/utils/getPosts";
 import { ClientRouter } from "astro:transitions";
 
 const posts = await getPosts();
+const isHomePage = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -20,7 +21,12 @@ const posts = await getPosts();
     <ClientRouter />
   </head>
   <body class="m-0 w-full h-full">
-    <SidebarLayout client:load posts={posts}>
+    <SidebarLayout
+      client:load
+      posts={posts}
+      showAnchors={isHomePage}
+      path={Astro.url.pathname}
+    >
       <div transition:animate="slide">
         <slot />
       </div>

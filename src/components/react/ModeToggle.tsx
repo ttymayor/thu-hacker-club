@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export const ThemeToggle = () => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {

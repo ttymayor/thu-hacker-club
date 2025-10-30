@@ -1,4 +1,4 @@
-import { Calendar, Folder, Home, File, Inbox } from "lucide-react";
+import { Calendar, Home, File, Inbox } from "lucide-react";
 
 import {
   Sidebar,
@@ -18,7 +18,19 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "@/components/ui/collapsible";
-import { getPosts } from "@/utils/getPosts";
+
+interface Post {
+  filename: string;
+  title: string;
+  author: string;
+  url: string;
+  path: string;
+}
+
+interface AppSidebarProps {
+  posts?: Post[];
+  path?: string;
+}
 
 // Menu items.
 const items = [
@@ -34,10 +46,9 @@ const items = [
   }
 ];
 
-export async function AppSidebar() {
-  const posts = await getPosts();
+export function AppSidebar({ posts = [], path }: AppSidebarProps) {
   return (
-    <Sidebar>
+    <Sidebar variant="floating">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>114 東海駭客社</SidebarGroupLabel>
@@ -45,7 +56,7 @@ export async function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={path === item.url}>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -56,7 +67,10 @@ export async function AppSidebar() {
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="cursor-pointer">
+                    <SidebarMenuButton
+                      className="cursor-pointer"
+                      isActive={path?.startsWith("/posts")}
+                    >
                       <Inbox />
                       <span>114 東海駭客社 - 上課內容</span>
                     </SidebarMenuButton>
@@ -65,7 +79,11 @@ export async function AppSidebar() {
                     <SidebarMenuSub>
                       {posts.map((post) => (
                         <SidebarMenuSubItem key={post.filename}>
-                          <SidebarMenuSubButton asChild size="sm">
+                          <SidebarMenuSubButton
+                            asChild
+                            size="sm"
+                            isActive={path === post.url}
+                          >
                             <a href={post.url}>
                               <File />
                               <span>{post.title}</span>
