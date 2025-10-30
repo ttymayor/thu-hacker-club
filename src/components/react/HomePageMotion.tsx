@@ -129,7 +129,7 @@ function Section({ id }: { id: number }) {
 
 export default function HomePageMotion() {
   return (
-    <div id="intro" className="relative snap-y snap-mandatory">
+    <div className="relative snap-y snap-mandatory">
       {[1, 2, 3, 4, 5].map((sectionId) => (
         <Section key={sectionId} id={sectionId} />
       ))}
